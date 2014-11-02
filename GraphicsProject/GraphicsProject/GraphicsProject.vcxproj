@@ -67,7 +67,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math_3d.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="pipeline.cpp" />
     <ClCompile Include="Interaction.cpp" />
   </ItemGroup>
@@ -75,7 +74,6 @@
     <ClInclude Include="control.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="math_3d.h" />
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="pipeline.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="shader.h" />
