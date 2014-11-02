@@ -18,7 +18,7 @@
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 640
 #define FRAME_TIME 50
-#define NUM_PARTICLES 30000
+#define NUM_PARTICLES 30000 //TODO change to info from settings class
 
 GLuint VBO;
 GLuint IBO;
@@ -28,7 +28,7 @@ int count = 0;
 
 
 
-static void RenderSceneCB()
+static void RenderSceneCB() 
 {
 	count = 1;
 	mainControl.newTime = glutGet(GLUT_ELAPSED_TIME);
