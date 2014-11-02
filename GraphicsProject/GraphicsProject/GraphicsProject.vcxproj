@@ -74,6 +74,7 @@
   <ItemGroup>
     <ClInclude Include="control.h" />
     <ClInclude Include="math_3d.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="pipeline.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="shader.h" />
