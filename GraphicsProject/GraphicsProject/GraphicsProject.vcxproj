@@ -68,9 +68,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math_3d.cpp" />
     <ClCompile Include="pipeline.cpp" />
+    <ClCompile Include="Interaction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h" />
+    <ClInclude Include="Interaction.h" />
     <ClInclude Include="math_3d.h" />
     <ClInclude Include="pipeline.h" />
     <ClInclude Include="shader.h" />
