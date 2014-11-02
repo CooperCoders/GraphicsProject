@@ -73,12 +73,16 @@
     <ClInclude Include="control.h" />
     <ClInclude Include="math_3d.h" />
     <ClInclude Include="pipeline.h" />
+    <ClInclude Include="settings.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="settings.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

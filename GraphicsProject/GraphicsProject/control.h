@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <list>
 #include "math_3d.h"
-
+#include "settings.h"
 
 class Control
 {
@@ -15,6 +15,7 @@ public:
 	bool keys[256];
 	float zoom;
 	Matrix4f transform;
+	Settings settings;
 };
 
 #endif
