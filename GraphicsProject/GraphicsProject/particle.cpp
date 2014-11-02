@@ -4,9 +4,9 @@
 
 Particle::Particle()
 {
-	X = Vector3f(0, 0, 0);
+	X = Vector3f(rand() / (float)RAND_MAX, 0, 0);
 	V = Vector3f(0, 0, 0);
-	A = Vector3f(0, 0, 0);
+	A = Vector3f(0, -1, 0);
 	P = Vertex(X, Vector4f(1, 0, 0, 1));
 }
 

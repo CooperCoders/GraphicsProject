@@ -14,6 +14,7 @@
 #include "vertex.h"
 #include "control.h"
 #include "pipeline.h"
+#include "particle.h"
 
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 640
@@ -24,6 +25,7 @@ GLuint VBO;
 GLuint IBO;
 Control mainControl;
 Vertex Vertices[NUM_PARTICLES * 2 + 100];
+Particle Particles[NUM_PARTICLES];
 int count = 0;
 
 
@@ -39,7 +41,10 @@ static void RenderSceneCB()
 	while (mainControl.deltaTime > 0)
 	{
 		int dt = !(FRAME_TIME < mainControl.deltaTime) ? mainControl.deltaTime : FRAME_TIME;
-		
+		for (int i = 0; i < NUM_PARTICLES; i++)
+		{
+			Particles[i].Step(mainControl.keys, dt);
+		}
 		mainControl.deltaTime -= dt;
 
 	}
@@ -58,7 +63,10 @@ static void RenderSceneCB()
 	p.SetPerspectiveProj(45, mainControl.windowWidth, mainControl.windowHeight, .01f, 100.0f);
 	mainControl.transform = *(p.GetTrans());
 
-
+	for (int i = 0; i < NUM_PARTICLES; i++)
+	{
+		Particles[i].Draw(Vertices, count);
+	}
 
 
 	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
