@@ -67,11 +67,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math_3d.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="pipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h" />
     <ClInclude Include="math_3d.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="pipeline.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="vertex.h" />
