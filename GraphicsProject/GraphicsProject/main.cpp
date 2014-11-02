@@ -14,7 +14,6 @@
 #include "vertex.h"
 #include "control.h"
 #include "pipeline.h"
-//#include "particle.h"
 
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 640
@@ -26,8 +25,6 @@ GLuint IBO;
 Control mainControl;
 Vertex Vertices[NUM_PARTICLES * 2 + 100];
 int count = 0;
-//Particle P[NUM_PARTICLES];
-//Particle test;
 
 
 
@@ -51,10 +48,6 @@ static void RenderSceneCB()
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	static float Scale = 0.0f;
-
-	Scale += 0.01f;
-	//Vertices[0].x = rand() / (float)RAND_MAX;
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_DYNAMIC_DRAW);
 
 
@@ -67,10 +60,6 @@ static void RenderSceneCB()
 
 
 
-
-
-	Matrix4f tmp;
-	tmp.InitIdentity();
 
 	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
 
@@ -186,8 +175,7 @@ int main(int argc, char** argv)
 	srand(time(NULL));
 	mainControl.zoom = 2;
 
-	
-	std::cout << "Initialized\n";
+
 	mainControl.currentTime = glutGet(GLUT_ELAPSED_TIME);
 
 

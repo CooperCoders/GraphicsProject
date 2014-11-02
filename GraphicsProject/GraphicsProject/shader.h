@@ -59,16 +59,10 @@ static void CompileShaders()
 		fs.append("\n");
 	}
 
-	//std::cout << vs << std::endl << fs << "Hello" << std::endl;
-
-	//system("PAUSE");
-
-
 
 	AddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
 	AddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
-	//system("PAUSE");
 
 	GLint Success = 0;
 	GLchar ErrorLog[1024] = { 0 };
@@ -78,7 +72,6 @@ static void CompileShaders()
 	if (Success == 0) {
 		glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
 		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-		//system("PAUSE");
 		exit(1);
 	}
 
@@ -87,7 +80,6 @@ static void CompileShaders()
 	if (!Success) {
 		glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
 		fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-		//system("PAUSE");
 		exit(1);
 	}
 
