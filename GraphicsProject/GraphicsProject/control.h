@@ -13,6 +13,7 @@ public:
 	int mouseX, mouseY;
 	int currentTime, deltaTime, newTime, fpsTime, frames;
 	bool keys[256];
+	bool mouse[6];
 	float zoom;
 	Matrix4f transform;
 };
