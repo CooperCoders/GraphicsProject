@@ -67,6 +67,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math_3d.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="pipeline.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="Source.cpp" />
