@@ -68,6 +68,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math_3d.cpp" />
     <ClCompile Include="pipeline.cpp" />
+    <ClCompile Include="settings.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h" />
@@ -75,6 +77,7 @@
     <ClInclude Include="pipeline.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="vertex.h" />
   </ItemGroup>
   <ItemGroup>
