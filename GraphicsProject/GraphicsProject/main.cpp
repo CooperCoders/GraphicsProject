@@ -169,7 +169,7 @@ int main(int argc, char** argv)
 	glEnable(GL_BLEND);
 	glEnable(GL_POINT_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glPointSize(2.0);
+	glPointSize(5.0);
 	InitializeGlutCallbacks();
 
 	srand(time(NULL));
