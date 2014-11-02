@@ -12,7 +12,6 @@ public:
 	void Step(bool *k, int dt);
 	Particle(Vector3f, Vector4f);
 	Particle();
-	float Rand1();
 };
 
 #endif
