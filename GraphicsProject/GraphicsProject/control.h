@@ -15,8 +15,9 @@ public:
 	bool keys[256];
 	bool mouse[6];
 	float zoom;
+	int test;
 	Matrix4f transform;
-	//Settings settings;
+	//Settings settings
 };
 
 #endif
