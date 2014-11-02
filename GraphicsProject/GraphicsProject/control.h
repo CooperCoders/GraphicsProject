@@ -16,7 +16,7 @@ public:
 	bool mouse[6];
 	float zoom;
 	Matrix4f transform;
-	Settings settings = Settings("settings.xml");
+	//Settings settings
 };
 
 #endif
