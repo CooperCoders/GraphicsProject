@@ -1,59 +1,168 @@
-/*
 
-Copyright 2010 Etay Meiri
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Tutorial 02 - Hello dot!
-*/
-
-#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <assert.h>
+#include <math.h>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-#include "math_3d.h"
+#include <time.h>
+#include <list>
+
+
+#include "shader.h"
+#include "control.h"
+#include "vertex.h"
+#include "control.h"
+#include "pipeline.h"
+//#include "particle.h"
+
+#define WINDOW_WIDTH  640
+#define WINDOW_HEIGHT 640
+#define FRAME_TIME 50
+#define NUM_PARTICLES 30000
 
 GLuint VBO;
+GLuint IBO;
+Control mainControl;
+Vertex Vertices[NUM_PARTICLES * 2 + 100];
+int count = 0;
+//Particle P[NUM_PARTICLES];
+//Particle test;
+
+
 
 static void RenderSceneCB()
 {
+	count = 1;
+	mainControl.newTime = glutGet(GLUT_ELAPSED_TIME);
+	mainControl.deltaTime = mainControl.newTime - mainControl.currentTime;
+	mainControl.fpsTime += mainControl.deltaTime;
+	mainControl.frames += 1;
+	mainControl.currentTime = mainControl.newTime;
+	while (mainControl.deltaTime > 0)
+	{
+		int dt = !(FRAME_TIME < mainControl.deltaTime) ? mainControl.deltaTime : FRAME_TIME;
+		
+		mainControl.deltaTime -= dt;
+
+	}
+
+
+
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	static float Scale = 0.0f;
 
-	glDrawArrays(GL_POINTS, 0, 1);
+	Scale += 0.01f;
+	//Vertices[0].x = rand() / (float)RAND_MAX;
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_DYNAMIC_DRAW);
+
+
+
+	Pipeline p;
+	p.Rotate(0.0f, 0, 0.0f);
+	p.WorldPos(0.0f, 0.0f, mainControl.zoom);
+	p.SetPerspectiveProj(45, mainControl.windowWidth, mainControl.windowHeight, .01f, 100.0f);
+	mainControl.transform = *(p.GetTrans());
+
+
+
+
+
+	Matrix4f tmp;
+	tmp.InitIdentity();
+
+	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+
+	glDrawArrays(GL_POINTS, 0, count);
 
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 
 	glutSwapBuffers();
+
+	if (mainControl.fpsTime > 1000)
+	{
+		std::cout << "Frames per Second: " << mainControl.frames / (mainControl.fpsTime / 1000.0f) << "\t\tParticles: " << count << std::endl;
+		mainControl.frames = 0;
+		mainControl.fpsTime = 0;
+	}
 }
 
+
+static void SpecialKeyboardCB(int Key, int x, int y)
+{
+	mainControl.mouseX = x;
+	mainControl.mouseY = y;
+}
+
+
+static void KeyboardCB(unsigned char Key, int x, int y)
+{
+	switch (Key) {
+	case 'q':
+		exit(0);
+	}
+	mainControl.mouseX = x;
+	mainControl.mouseY = y;
+	mainControl.keys[Key] = true;
+}
+
+void ReleaseKeyCB(unsigned char key, int x, int y)
+{
+	mainControl.keys[key] = false;
+}
+
+static void PassiveMouseCB(int x, int y)
+{
+	mainControl.mouseX = x;
+	mainControl.mouseY = y;
+}
+
+void ChangeSizeCB(int w, int h)
+{
+	if (h == 0)
+		h = 1;
+
+	float ratio = w * 1.0 / h;
+	mainControl.windowWidth = w;
+	mainControl.windowHeight = h;
+	glViewport(0, 0, w, h);
+}
+
+static void ActiveMouseCB(int button, int state, int x, int y)
+{
+	mainControl.mouseX = x;
+	mainControl.mouseY = y;
+}
 
 static void InitializeGlutCallbacks()
 {
 	glutDisplayFunc(RenderSceneCB);
+	glutIdleFunc(RenderSceneCB);
+	glutSpecialFunc(SpecialKeyboardCB);
+	glutPassiveMotionFunc(PassiveMouseCB);
+	glutKeyboardFunc(KeyboardCB);
+	glutMouseFunc(ActiveMouseCB);
+	glutReshapeFunc(ChangeSizeCB);
+	glutKeyboardUpFunc(ReleaseKeyCB);
+	glutMotionFunc(PassiveMouseCB);
 }
 
 static void CreateVertexBuffer()
 {
-	Vector3f Vertices[1];
-	Vertices[0] = Vector3f(0.0f, 0.0f, 0.0f);
+	Vertices[0] = Vertex(Vector3f(0.f, .0f, 0.0f), Vector4f(1, 0, 0, 1));
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_DYNAMIC_DRAW);
 }
 
 
@@ -61,26 +170,42 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(1024, 768);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Graphics Project");
 
+	glFrontFace(GL_CW);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glEnable(GL_POINT_SMOOTH);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glPointSize(2.0);
 	InitializeGlutCallbacks();
+
+	srand(time(NULL));
+	mainControl.zoom = 2;
+
+	
+	std::cout << "Initialized\n";
+	mainControl.currentTime = glutGet(GLUT_ELAPSED_TIME);
+
 
 	// Must be done after glut is initialized!
 	GLenum res = glewInit();
 	if (res != GLEW_OK) {
-		fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
 		return 1;
 	}
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	printf("GL version: %s\n", glGetString(GL_VERSION));
+
+	glClearColor(0.f, 0.f, 0.f, 0.0f);
 
 	CreateVertexBuffer();
+
+	CompileShaders();
 
 	glutMainLoop();
 
 	return 0;
 }
-
-
