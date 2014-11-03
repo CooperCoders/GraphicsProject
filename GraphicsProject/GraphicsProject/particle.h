@@ -9,7 +9,7 @@ public:
 	Vertex P;
 	Vector3f X, V, A;
 	void Draw(Vertex*, int&);
-	void Step(bool *k, int dt);
+	void Step(bool *k, int* m, int _x, int _y, int dt);
 	Particle(Vector3f, Vector4f);
 	Particle();
 };

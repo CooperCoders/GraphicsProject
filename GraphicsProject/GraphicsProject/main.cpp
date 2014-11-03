@@ -33,19 +33,19 @@ int count = 0;
 static void RenderSceneCB() 
 {
 	count = 1;
-	mainControl.newTime = glutGet(GLUT_ELAPSED_TIME);
-	mainControl.deltaTime = mainControl.newTime - mainControl.currentTime;
-	mainControl.fpsTime += mainControl.deltaTime;
-	mainControl.frames += 1;
-	mainControl.currentTime = mainControl.newTime;
-	while (mainControl.deltaTime > 0)
+	mainControl.NewTime = glutGet(GLUT_ELAPSED_TIME);
+	mainControl.DeltaTime = mainControl.NewTime - mainControl.CurrentTime;
+	mainControl.FpsTime += mainControl.DeltaTime;
+	mainControl.Frames += 1;
+	mainControl.CurrentTime = mainControl.NewTime;
+	while (mainControl.DeltaTime > 0)
 	{
-		int dt = !(FRAME_TIME < mainControl.deltaTime) ? mainControl.deltaTime : FRAME_TIME;
+		int dt = !(FRAME_TIME < mainControl.DeltaTime) ? mainControl.DeltaTime : FRAME_TIME;
 		for (int i = 0; i < NUM_PARTICLES; i++)
 		{
-			Particles[i].Step(mainControl.keys, dt);
+			Particles[i].Step(mainControl.Keys, mainControl.Mouse, mainControl.MouseX, mainControl.MouseY, dt);
 		}
-		mainControl.deltaTime -= dt;
+		mainControl.DeltaTime -= dt;
 
 	}
 
@@ -59,9 +59,9 @@ static void RenderSceneCB()
 
 	Pipeline p;
 	p.Rotate(0.0f, 0, 0.0f);
-	p.WorldPos(0.0f, 0.0f, mainControl.zoom);
-	p.SetPerspectiveProj(45, mainControl.windowWidth, mainControl.windowHeight, .01f, 100.0f);
-	mainControl.transform = *(p.GetTrans());
+	p.WorldPos(0.0f, 0.0f, mainControl.Zoom);
+	p.SetPerspectiveProj(45, mainControl.WindowWidth, mainControl.WindowHeight, .01f, 100.0f);
+	mainControl.Transform = *(p.GetTrans());
 
 	for (int i = 0; i < NUM_PARTICLES; i++)
 	{
@@ -85,19 +85,20 @@ static void RenderSceneCB()
 
 	glutSwapBuffers();
 
-	if (mainControl.fpsTime > 1000)
+	if (mainControl.FpsTime > 100)
 	{
-		std::cout << "Frames per Second: " << mainControl.frames / (mainControl.fpsTime / 1000.0f) << "\t\tParticles: " << count << std::endl;
-		mainControl.frames = 0;
-		mainControl.fpsTime = 0;
+		std::cout << "Frames per Second: " << mainControl.Frames / (mainControl.FpsTime / 1000.0f) << "\t\tParticles: " << count << std::endl;
+		mainControl.Frames = 0;
+		mainControl.FpsTime = 0;
+		std::cout << mainControl.MouseX << "\t" << mainControl.MouseY << "\t" << mainControl.Mouse[0] << std::endl;
 	}
 }
 
 
 static void SpecialKeyboardCB(int Key, int x, int y)
 {
-	mainControl.mouseX = x;
-	mainControl.mouseY = y;
+	mainControl.MouseX = x;
+	mainControl.MouseY = y;
 }
 
 
@@ -107,20 +108,20 @@ static void KeyboardCB(unsigned char Key, int x, int y)
 	case 'q':
 		exit(0);
 	}
-	mainControl.mouseX = x;
-	mainControl.mouseY = y;
-	mainControl.keys[Key] = true;
+	mainControl.MouseX = x;
+	mainControl.MouseY = y;
+	mainControl.Keys[Key] = true;
 }
 
 void ReleaseKeyCB(unsigned char key, int x, int y)
 {
-	mainControl.keys[key] = false;
+	mainControl.Keys[key] = false;
 }
 
 static void PassiveMouseCB(int x, int y)
 {
-	mainControl.mouseX = x;
-	mainControl.mouseY = y;
+	mainControl.MouseX = x;
+	mainControl.MouseY = y;
 }
 
 void ChangeSizeCB(int w, int h)
@@ -129,15 +130,16 @@ void ChangeSizeCB(int w, int h)
 		h = 1;
 
 	float ratio = w * 1.0 / h;
-	mainControl.windowWidth = w;
-	mainControl.windowHeight = h;
+	mainControl.WindowWidth = w;
+	mainControl.WindowHeight = h;
 	glViewport(0, 0, w, h);
 }
 
 static void ActiveMouseCB(int button, int state, int x, int y)
 {
-	mainControl.mouseX = x;
-	mainControl.mouseY = y;
+	mainControl.MouseX = x;
+	mainControl.MouseY = y;
+	mainControl.Mouse[button] = state;
 }
 
 static void InitializeGlutCallbacks()
@@ -155,7 +157,7 @@ static void InitializeGlutCallbacks()
 
 static void CreateVertexBuffer()
 {
-	Vertices[0] = Vertex(Vector3f(0.f, .0f, 0.0f), Vector4f(1, 0, 0, 1));
+	Vertices[0] = Vertex(Vector3f(0.f, .0f, 0.0f), Vector4f(0, 0, 1, 1));
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -181,10 +183,10 @@ int main(int argc, char** argv)
 	InitializeGlutCallbacks();
 
 	srand(time(NULL));
-	mainControl.zoom = 2;
+	mainControl.Zoom = 1 + sqrt(2);
 
 
-	mainControl.currentTime = glutGet(GLUT_ELAPSED_TIME);
+	mainControl.CurrentTime = glutGet(GLUT_ELAPSED_TIME);
 
 
 	// Must be done after glut is initialized!

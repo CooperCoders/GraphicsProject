@@ -9,14 +9,14 @@
 class Control
 {
 public:
-	int windowWidth, windowHeight;
-	int mouseX, mouseY;
-	int currentTime, deltaTime, newTime, fpsTime, frames;
-	bool keys[256];
-	bool mouse[6];
-	float zoom;
-	Matrix4f transform;
-	Settings settings = Settings("settings.xml");
+	int WindowWidth, WindowHeight;
+	int MouseX, MouseY;
+	int CurrentTime, DeltaTime, NewTime, FpsTime, Frames;
+	bool Keys[256];
+	int Mouse[6];
+	float Zoom;
+	Matrix4f Transform;
+	Settings CurrentSettings = Settings("settings.xml");
 };
 
 #endif
