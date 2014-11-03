@@ -7,6 +7,7 @@
 #include <GL/freeglut.h>
 #include <time.h>
 #include <list>
+#include <thread>
 
 
 #include "shader.h"
@@ -28,6 +29,13 @@ Vertex Vertices[NUM_PARTICLES * 2 + 100];
 Particle Particles[NUM_PARTICLES];
 int count = 0;
 
+void Step(int min, int max, int dt)
+{
+	for (int i = min; i < max; i++)
+	{
+		Particles[i].Step(mainControl.Keys, mainControl.Mouse, mainControl.MouseX, mainControl.MouseY, dt);
+	}
+}
 
 
 static void RenderSceneCB() 
@@ -41,10 +49,13 @@ static void RenderSceneCB()
 	while (mainControl.DeltaTime > 0)
 	{
 		int dt = !(FRAME_TIME < mainControl.DeltaTime) ? mainControl.DeltaTime : FRAME_TIME;
-		for (int i = 0; i < NUM_PARTICLES; i++)
-		{
-			Particles[i].Step(mainControl.Keys, mainControl.Mouse, mainControl.MouseX, mainControl.MouseY, dt);
-		}
+		std::thread a(Step, 0, NUM_PARTICLES / 4, dt);
+		std::thread b(Step, NUM_PARTICLES / 4, NUM_PARTICLES / 2, dt);
+		std::thread c(Step, NUM_PARTICLES / 2, 3 * NUM_PARTICLES / 4, dt);
+		Step(3 * NUM_PARTICLES / 4, NUM_PARTICLES, dt);
+		a.join();
+		b.join();
+		c.join();
 		mainControl.DeltaTime -= dt;
 
 	}
@@ -85,12 +96,11 @@ static void RenderSceneCB()
 
 	glutSwapBuffers();
 
-	if (mainControl.FpsTime > 100)
+	if (mainControl.FpsTime > 1000)
 	{
 		std::cout << "Frames per Second: " << mainControl.Frames / (mainControl.FpsTime / 1000.0f) << "\t\tParticles: " << count << std::endl;
 		mainControl.Frames = 0;
 		mainControl.FpsTime = 0;
-		std::cout << mainControl.MouseX << "\t" << mainControl.MouseY << "\t" << mainControl.Mouse[0] << std::endl;
 	}
 }
 
