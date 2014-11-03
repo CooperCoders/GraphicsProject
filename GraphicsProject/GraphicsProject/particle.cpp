@@ -23,6 +23,9 @@ void Particle::Step(bool* k, int dt)
 	V += A * (dt / 1000.0f);
 	X += V * (dt / 1000.0f);
 	P.X = X;
+	if (X.y <= -0.84){
+		V.y *= -1;
+	}
 }
 
 void Particle::Draw(Vertex* buf, int& count)
