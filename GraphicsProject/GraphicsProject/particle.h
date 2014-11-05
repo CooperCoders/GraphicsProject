@@ -12,7 +12,6 @@ public:
 	void Step(bool *k, int* m, int _x, int _y, int dt);
 	int ColorSpeed;
 	float ColorAngle;
-	float ColorOffset;
 	Particle(Vector3f, Vector4f);
 	Particle();
 	Vector4f GetColor(float, float);

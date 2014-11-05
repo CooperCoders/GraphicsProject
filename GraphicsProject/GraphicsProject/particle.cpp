@@ -9,7 +9,6 @@ Particle::Particle()
 	A = Vector3f(0, -1, 0);
 	P = Vertex(X, Vector4f(.9, 0, 0, rand() / (float)RAND_MAX));
 	ColorSpeed = 30;
-	ColorOffset = rand() / (float)RAND_MAX * 360;
 }
 
 Particle::Particle(Vector3f x, Vector4f c)
@@ -28,7 +27,7 @@ void Particle::Step(bool* k, int* m, int _x, int _y, int dt)
 	ColorAngle += ColorSpeed * (dt / 1000.0f);
 	
 	P.X = X;
-	P.Color = GetColor(ColorAngle + ColorOffset, 1.0f);
+	P.Color = GetColor(ColorAngle, 1.0f);
 	if (X.y < -1)
 	{
 		V.y *= -.99;
@@ -49,10 +48,15 @@ void Particle::Step(bool* k, int* m, int _x, int _y, int dt)
 		V.x *= -1;
 		X.x = .999;
 	}
-	if (!m[0])
+	if (!m[0] && m[2])
 	{
 		A = Vector3f((_x - 320) / 320.0f, (_y - 320) / -320.0f, 0) - X;
 		A *= 10 / (sqrt(A.x * A.x + A.y * A.y));
+	}
+	else if (!m[2] && m[0])
+	{
+		A = Vector3f((_x - 320) / 320.0f, (_y - 320) / -320.0f, 0) - X;
+		A *= -10 / (sqrt(A.x * A.x + A.y * A.y));
 	}
 	else
 	{

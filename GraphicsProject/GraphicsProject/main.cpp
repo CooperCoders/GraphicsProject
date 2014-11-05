@@ -20,7 +20,7 @@
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 640
 #define FRAME_TIME 50
-#define NUM_PARTICLES 30000 //TODO change to info from settings class
+#define NUM_PARTICLES 100000 //TODO change to info from settings class
 
 GLuint VBO;
 GLuint IBO;
